@@ -141,7 +141,8 @@ def run_pip(command, desc=None, live=default_command_live):
         return
 
     index_url_line = f' --index-url {index_url}' if index_url != '' else ''
-    return run(f'"{python}" -m pip {command} --prefer-binary{index_url_line}', desc=f"Installing {desc}", errdesc=f"Couldn't install {desc}", live=live)
+    return run(f'uv pip {command}', desc=f"Installing {desc}", errdesc=f"Couldn't install {desc}", live=live)
+    #return run(f'"{python}" -m pip {command} --prefer-binary{index_url_line}', desc=f"Installing {desc}", errdesc=f"Couldn't install {desc}", live=live)
 
 
 def check_run_python(code: str) -> bool:
@@ -343,7 +344,7 @@ def prepare_environment():
 
     xformers_package = os.environ.get('XFORMERS_PACKAGE', 'xformers==0.0.23.post1')
     clip_package = os.environ.get('CLIP_PACKAGE', "https://github.com/openai/CLIP/archive/d50d76daa670286dd6cacf3bcd80b5e4823fc8e1.zip")
-    openclip_package = os.environ.get('OPENCLIP_PACKAGE', "https://github.com/mlfoundations/open_clip/archive/bb6e834e9c70d9c27d0dc3ecedeebeaeb1ffad6b.zip")
+    #openclip_package = os.environ.get('OPENCLIP_PACKAGE', "https://github.com/mlfoundations/open_clip/archive/bb6e834e9c70d9c27d0dc3ecedeebeaeb1ffad6b.zip")
 
     assets_repo = os.environ.get('ASSETS_REPO', "https://github.com/AUTOMATIC1111/stable-diffusion-webui-assets.git")
     stable_diffusion_repo = os.environ.get('STABLE_DIFFUSION_REPO', "https://github.com/Stability-AI/stablediffusion.git")
@@ -394,9 +395,9 @@ def prepare_environment():
         run_pip(f"install {clip_package}", "clip")
         startup_timer.record("install clip")
 
-    if not is_installed("open_clip"):
-        run_pip(f"install {openclip_package}", "open_clip")
-        startup_timer.record("install open_clip")
+    #if not is_installed("open_clip"):
+    #    run_pip(f"install {openclip_package}", "open_clip")
+    #    startup_timer.record("install open_clip")
 
     if (not is_installed("xformers") or args.reinstall_xformers) and args.xformers:
         run_pip(f"install -U -I --no-deps {xformers_package}", "xformers")
@@ -480,3 +481,5 @@ def dump_sysinfo():
         file.write(text)
 
     return filename
+
+
